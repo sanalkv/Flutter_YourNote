@@ -23,10 +23,12 @@ class _NoteState extends State<Flare> {
         child: Column(children: <Widget>[
           Spacer(flex: 2,),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 height: 170,
-                width: 150,
+                width: 120,
                 child: FlareActor(
                   "assets/original.flr",
                   animation: "note",

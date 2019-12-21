@@ -52,32 +52,32 @@ class _NotesState extends State<Notes> {
       ),
       body: Container(
         decoration: BoxDecoration(gradient: widget.grad),
-        child: FutureBuilder<List<YourNote>>(
-            future: fetchNotes(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data.isEmpty) {
-                  return Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 50.0),
-                          child: Text("ADD YOUR FIRST NOTE !!",
-                              style: TextStyle(
-                                  fontFamily: "Times New Roman",
-                                  fontSize: 22,
-                                  color: Colors.orange)),
+        child: SafeArea(
+                  child: FutureBuilder<List<YourNote>>(
+              future: fetchNotes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.isEmpty) {
+                    return Stack(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: Text("ADD YOUR FIRST NOTE !!",
+                                style: TextStyle(
+                                    fontFamily: "Times New Roman",
+                                    fontSize: 22,
+                                    color: Colors.orange)),
+                          ),
                         ),
-                      ),
-                      FlareActor("assets/flaree.flr", animation: "arrow")
-                    ],
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 70),
-                    child: ListView.builder(
+                        FlareActor("assets/flaree.flr", animation: "arrow")
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
                         itemCount: snapshot.data.length,
+                        padding: EdgeInsets.only(bottom: 70,left: 15,right: 15,top: 15),
                         itemBuilder: (context, index) {
                           return Card(
                             color: Colors.yellow[500],
@@ -90,14 +90,13 @@ class _NotesState extends State<Notes> {
                                               widget.grad,
                                               snapshot.data[index])));
                                 },
-                                trailing: GestureDetector(
-                                    onTap: () {
-                                      delete(snapshot.data[index].title);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: Colors.orange[400],
-                                    )),
+                                trailing: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.orange[400],
+                                  ),
+                                  onPressed: ()=>delete(snapshot.data[index].title),
+                                ),
                                 title: Text(
                                   snapshot.data[index].title,
                                   maxLines: 1,
@@ -107,17 +106,17 @@ class _NotesState extends State<Notes> {
                                       color: randomColor()),
                                 )),
                           );
-                        }),
-                  );
+                        });
+                  }
+                } else {
+                  return Container(
+                      alignment: AlignmentDirectional.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                      ));
                 }
-              } else {
-                return Container(
-                    alignment: AlignmentDirectional.center,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                    ));
-              }
-            }),
+              }),
+        ),
       ),
     );
   }
@@ -135,6 +134,7 @@ class _NotesState extends State<Notes> {
             ),
             actions: <Widget>[
               RaisedButton(
+                color: Colors.orange,
                 child: Text(
                   "Yes",
                   style: TextStyle(
@@ -150,6 +150,7 @@ class _NotesState extends State<Notes> {
                 },
               ),
               RaisedButton(
+                color:Colors.grey,
                   child: Text(
                     "No",
                     style: TextStyle(
